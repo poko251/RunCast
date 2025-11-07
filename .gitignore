@@ -1,0 +1,10 @@
+
+data/personal/
+data/processed/personal_clean.csv
+
+
+models/
+
+
+venv/
+.env/
