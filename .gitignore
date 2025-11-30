@@ -5,6 +5,8 @@ data/processed/personal_clean.csv
 
 models/
 
+__pcache__/
 
+*.pyc
 venv/
 .env
