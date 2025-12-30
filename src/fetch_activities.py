@@ -50,13 +50,14 @@ def take_important_data(file_path):
     newdf["has_heartrate"] = newdf["has_heartrate"].astype(int)
     newdf["distance_km"] = newdf["distance"] / 1000
     newdf["distance_m"] = newdf["distance"]
+    
     newdf = newdf.drop(["elapsed_time", "distance", "average_cadence"], axis=1)
 
-    newdf = newdf[["id", "elapsed_time_sec", "elapsed_time_min", "distance_m", "distance_km", "has_heartrate", "average_heartrate", "max_heartrate", "has_cadence", "avg_cadence_real", "average_speed", "total_elevation_gain"]]
+    newdf = newdf[["id", "elapsed_time_min", "distance_m", "distance_km", "has_heartrate", "average_heartrate", "max_heartrate", "has_cadence", "avg_cadence_real", "average_speed", "total_elevation_gain"]]
 
     name = Path(file_path).stem
 
-    output_dir = os.path.join("data", "processed")
+    output_dir = os.path.join("data", "personal", "processed")
     os.makedirs(output_dir, exist_ok=True)
 
     newdf.to_csv(os.path.join(output_dir, f"{name}.csv"), index=False)
