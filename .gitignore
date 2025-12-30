@@ -1,6 +1,7 @@
 
 data/personal/
-data/processed/personal_clean.csv
+
+notebooks/test.ipynb
 
 
 models/
