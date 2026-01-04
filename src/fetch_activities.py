@@ -39,8 +39,12 @@ def fetch_activities_from_strava(access_token, per_page=100, page=1):
 def take_important_data(file_path):
     "Takes important data from json and saves it to /processed as csv"
     df = pd.read_json(file_path)
-    columns = ["elapsed_time", "distance" ,"total_elevation_gain", "id", "average_speed", "average_cadence", "has_heartrate", "average_heartrate", "max_heartrate"]
 
+    
+    columns = ["elapsed_time", "distance" ,"total_elevation_gain", "id", "average_speed", "average_cadence", "has_heartrate", "average_heartrate", "max_heartrate", "type"]
+
+    #only runs
+    df = df[df["type"] == "Run"]
     newdf = df[columns].copy()
 
     newdf["avg_cadence_real"] = newdf["average_cadence"] * 2
