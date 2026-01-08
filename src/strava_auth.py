@@ -1,13 +1,11 @@
 import os
-import requests
 import time
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
+from stravalib.client import Client
 
-#loads values from .env file and return it as dict
-def load_env():
+def load_env_data():
     load_dotenv()
-
-    env = {
+    return {
         "client_id": os.getenv("STRAVA_CLIENT_ID"),
         "client_secret": os.getenv("STRAVA_CLIENT_SECRET"),
         "refresh_token": os.getenv("STRAVA_REFRESH_TOKEN"),
@@ -15,68 +13,38 @@ def load_env():
         "expires_at": os.getenv("STRAVA_EXPIRES_AT"),
     }
 
-    return env
+def update_env_file(access_token, refresh_token, expires_at):
+    env_path = ".env"
+    set_key(env_path, "STRAVA_ACCESS_TOKEN", access_token)
+    set_key(env_path, "STRAVA_REFRESH_TOKEN", refresh_token)
+    set_key(env_path, "STRAVA_EXPIRES_AT", str(expires_at))
 
-#refresh access_token using refresh_token and updates venv
-def refresh_access_token():
-    env = load_env()
+def get_strava_client():
+    env = load_env_data()
+    client = Client()
 
-    client_id = env["client_id"]
-    client_secret = env["client_secret"]
-    refresh_token = env["refresh_token"]
+    client.refresh_token = env["refresh_token"]
 
-
-    url = "https://www.strava.com/oauth/token"
-
-    payload = {
-    "client_id": client_id,
-    "client_secret": client_secret,
-    "grant_type": "refresh_token",
-    "refresh_token": refresh_token
-}
-    
-    response = requests.post(url, data=payload)
-
-    if response.status_code != 200:
-        print("Error refreshing token:", response.text)
-        raise Exception("Failed to refresh token")
-    
-    data = response.json()
-
-    new_access_token = data["access_token"]
-    new_refresh_token = data["refresh_token"]
-    expires_at = data["expires_at"]
-
-    with open(".env", "r") as f:
-        lines = f.readlines()
-
-    new_lines = []
-
-    for line in lines:
-        if line.startswith("STRAVA_ACCESS_TOKEN"):
-            new_lines.append(f"STRAVA_ACCESS_TOKEN={new_access_token}\n")
-        elif line.startswith("STRAVA_REFRESH_TOKEN"):
-            new_lines.append(f"STRAVA_REFRESH_TOKEN={new_refresh_token}\n")
-        elif line.startswith("STRAVA_EXPIRES_AT"):
-            new_lines.append(f"STRAVA_EXPIRES_AT={expires_at}\n")
-        else:
-            new_lines.append(line)
-
-    with open(".env", "w") as f:
-        f.writelines(new_lines)
-
-    return new_access_token
-
-#checks if access_token is valid, if not refresh it
-def get_valid_acces_token():
-    env = load_env()
-
-    expires_at = int(env["expires_at"])
+    #checks if token is expireed
+    expires_at = int(env["expires_at"]) if env["expires_at"] else 0
     now = int(time.time())
 
-    if expires_at > now:
-        return env["access_token"]
-    
+    if now > expires_at:
+        token_response = client.refresh_access_token(
+            client_id=env["client_id"],
+            client_secret=env["client_secret"],
+            refresh_token=env["refresh_token"]
+        )
+
+        update_env_file(
+            token_response['access_token'],
+            token_response['refresh_token'],
+            token_response['expires_at']
+        )
+        
+        client.access_token = token_response['access_token']
     else:
-        new_token = refresh_access_token()
-        return new_token
+        print("Token jest nadal ważny.")
+        client.access_token = env["access_token"]
+
+    return client
