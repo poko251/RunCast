@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import sys
 from streamlit_folium import st_folium
+import joblib
 root_path = Path(__file__).resolve().parent.parent
 sys.path.append(str(root_path))
 
@@ -14,7 +15,7 @@ from src.plots import (
     draw_github_calendar
 )
 
-from src.riegel import riegel, riegel_choose_activity
+from src.riegel import predict_riegel
 from src.scripts import format_time, clean_nan
 from src.map import f_map
 
@@ -199,9 +200,15 @@ def run_stats(df, id):
     with col8:
         st.metric("Total elevation gain", f"{elev}m")
 
+def predictions(df, target_distance):
+    col1, col2 = st.columns(2, border=True)
 
-        
+    with col1:
 
+        predicted_time, predicted_pace = predict_riegel(df, target_distance)
+        st.write("Riegel's Formula based on the best run of the last 10.")
+        st.metric("Predicted time", f"{format_time(predicted_time)}min")
+        st.metric("Predicted pace", f"{round(predicted_pace, 2)}min/km")
 
 
 
@@ -221,14 +228,5 @@ if __name__ == "__main__":
         run_map(df, id)
 
     with tab3:
-        d1, t1 = riegel_choose_activity(df)
-        d2 = 5
-        t2 = riegel(t1, d1, d2)
-
-        # distance, time = riegel_choose_activity(df)
-
-    # d2 = st.text_input("Distance:")
-
-    # if d2:
-    #     d2 = float(d2)
-    #     t2 = riegel(time, distance, d2)
+        target_distance = st.number_input("Distance (km):")
+        predictions(df, target_distance)
