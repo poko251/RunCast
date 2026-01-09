@@ -1,8 +1,8 @@
-#RunCast 
+# RunCast 
 
 **RunCast** is an intelligent running dashboard that integrates Strava data with advanced ML analytics.
 
-##Key Features
+## Key Features
 
 ###  Automated Strava Sync
 * **Direct API Integration:** Fetch your latest activities using the Strava API.
@@ -41,7 +41,7 @@ runcast/
 │   ├── personal/
 │   └── public/
 └── notebooks/              # Jupyter Notebooks
-""
+```
 
 ##  How to Run
 
@@ -51,13 +51,18 @@ To sync with Strava, you need to provide your API credentials. Create a `.env` f
 ```text
 CLIENT_ID=your_strava_client_id
 CLIENT_SECRET=your_strava_client_secret
+```
 
 ### 2. Installation 
 
+```text
 pip install -r requirements.txt
+```
 
 ### 3. Launch the Dashboard
 
 Run the application from the root directory of the project using the following command:
 
+```text
 streamlit run dashboard/main.py
+```
