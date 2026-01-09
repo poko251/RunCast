@@ -19,6 +19,28 @@
 * **XGBoost Regressor:** A Machine Learning model trained specifically on your running physiology.
 * **kNN Augmentation:** Supplements your data with 200 "digital twin" activities from a global database of 40,000 runs to ensure accuracy even with few personal records.
 
+## 🛠️ Technical Stack
+
+### Frontend & UI
+* **Streamlit** 
+* **Folium & Streamlit-Folium** 
+
+### Machine Learning & AI
+* **XGBoost** 
+* **Scikit-Learn** 
+* **Joblib**
+
+### 📊 Data Science & Analytics
+* **Pandas** 
+* **NumPy** 
+* **Plotly & Ridgeplot** 
+
+### ⚙️ Backend & Utilities
+* **Stravalib** 
+* **Python-Dotenv** 
+* **Pathlib** 
+
+
 ## Project Structure
 
 ```text
