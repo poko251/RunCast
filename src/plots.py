@@ -23,29 +23,29 @@ def pace_zones_distribution(df):
     zone_counts = df['zone'].value_counts().reindex(labels).fillna(0)
 
     df_pie = zone_counts.reset_index()
-    df_pie.columns = ['Strefa', 'Liczba']
+    df_pie.columns = ['Zone', 'Number']
 
     fig = px.pie(
         df_pie, 
-        values='Liczba', 
-        names='Strefa', 
-        title='Dystrybucja Stref Tempa',
+        values='Number', 
+        names='Zone', 
+        title='Pace Zone Distribution',
         color_discrete_sequence=px.colors.qualitative.Safe, 
         hole=0.4 
     )
 
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def distance_distribution(df):
     bins = [0, 5.0, 10.0, 15.0, 21.1, float('inf')]
     
     labels = [
-        'Krótki bieg (< 5 km)', 
+        'Short  (< 5 km)', 
         'Standard (5 - 10 km)', 
-        'Średni (10 - 15 km)', 
-        'Długi (15 - 21.1 km)', 
-        'Półmaraton+ (> 21.1 km)'
+        'Medium (10 - 15 km)', 
+        'Long (15 - 21.1 km)', 
+        'Halfmarathon+ (> 21.1 km)'
     ]
 
     df['dist_category'] = pd.cut(df['distance_km'], bins=bins, labels=labels, right=False)
@@ -54,19 +54,19 @@ def distance_distribution(df):
 
 
     df_dist_pie = dist_counts.reset_index()
-    df_dist_pie.columns = ['Kategoria', 'Liczba']
+    df_dist_pie.columns = ['Category', 'Number']
 
 
     fig = px.pie(
         df_dist_pie, 
-        values='Liczba', 
-        names='Kategoria', 
-        title='Dystrybucja Dystansów',
+        values='Number', 
+        names='Category', 
+        title='Distance distribution',
         color_discrete_sequence=px.colors.qualitative.Pastel, 
         hole=0.4 
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def draw_ridge_plot(df):
 
@@ -87,7 +87,7 @@ def draw_ridge_plot(df):
             labels.append(day)
 
     if not samples:
-        st.info("Dodaj więcej treningów (min. 2 w te same dni), aby zobaczyć rozkład.")
+        st.info("Add more runs")
         return
 
     fig = ridgeplot(
@@ -102,6 +102,7 @@ def draw_ridge_plot(df):
     )
 
     fig.update_layout(
+        title="Distribution of runs during the day",
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
     
@@ -132,13 +133,13 @@ def draw_ridge_plot(df):
 
     fig.update_traces(line=dict(color='black', width=1.5))
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
-def draw_github_calendar(df):
+def draw_github_calendar(df, year):
     df['date'] = pd.to_datetime(df['start_date']).dt.date
     daily_km = df.groupby('date')['distance_km'].sum()
 
-    all_days = pd.date_range("2025-01-01", "2025-12-31")
+    all_days = pd.date_range(f"{year}-01-01", f"{year}-12-31")
     z_values = [daily_km.get(d.date(), 0) for d in all_days]
     
     weeks = [d.isocalendar()[1] for d in all_days]
@@ -148,11 +149,11 @@ def draw_github_calendar(df):
         z=z_values,
         x=weeks,
         y=weekdays,
-        colorscale=[[0, '#ebedf0'], [0.1, '#9be9a8'], [0.5, '#40c463'], [1, '#216e39']],
+        colorscale=[[0, '#151B23'], [0.1, '#9be9a8'], [0.5, '#40c463'], [1, '#216e39']],
         showscale=False,
         xgap=3, ygap=3,
         hoverinfo="text",
-        text=[f"{d.date()}: {z:.2f} km" for d, z in zip(all_days, z_values)]
+        text=[f"Date: {d.strftime('%d %b')}<br>Distance: {z:.2f} km" for d, z in zip(all_days, z_values)]
     ))
 
     fig.update_layout(
@@ -170,7 +171,7 @@ def draw_github_calendar(df):
         margin=dict(t=10, b=10, l=10, r=10)
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def draw_pace_over_time(df):
@@ -181,12 +182,21 @@ def draw_pace_over_time(df):
         df, 
         x='start_date', 
         y='pace_min/km',
-        title='Ewolucja Tempa na Przestrzeni Czasu',
+        title='Pace over time',
         markers=True,              
-        labels={'start_date': 'Data', 'pace_min/km': 'Tempo (min/km)'},
-        hover_data={'start_date': '|%B %d, %Y', 'pace_min/km': ':.2f'} 
+        hover_data={
+            'pace_min/km': False,       
+            'pace_readable': True,   
+            'time_readable': True,    
+            'distance_km': ':.2f',    
+            'start_date': '|%B %d, %Y'  
+        },
+        labels={
+            'pace_readable': 'Pace',
+            'time_readable': 'Duration',
+            'distance_km': 'Distance'
+        }
     )
-
 
     fig.update_yaxes(autorange="reversed")
 
@@ -202,4 +212,4 @@ def draw_pace_over_time(df):
 
     fig.update_traces(line_color='#1f77b4', marker=dict(size=8, color='#ff7f0e'))
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
