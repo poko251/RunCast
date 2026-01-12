@@ -4,41 +4,7 @@
 
 ## Key Features
 
-###  Automated Strava Sync
-* **Direct API Integration:** Fetch your latest activities using the Strava API.
-* **Smart Processing:** Automatic conversion of raw JSON data into clean, analyzed CSV datasets.
-* **Outlier Detection:** Filtering to remove "noise" data (e.g., accidental recordings).
-
-### Performance Analytics
-* **Interactive Visualizations:** Ridge Plot, Pace Over Time, Zone Distribution.
-* **Activity Heatmap:** Track consistency with a GitHub-style "contribution" calendar for your runs.
-* **Interactive Mapping:** Fully interactive GPS maps for every activity using Folium and Polyline decoding.
-
-###  AI Performance Predictor `BETA`
-* **Riegel’s Baseline:** Compare predictions with the classic Riegel Formula based on your best historical performance.
-* **XGBoost Regressor:** A Machine Learning model trained specifically on your running physiology.
-* **kNN Augmentation:** Supplements your data with 200 "digital twin" activities from a global database of 40,000 runs to ensure accuracy even with few personal records.
-
-## Technical Stack
-
-### Frontend & UI
-* **Streamlit** 
-* **Folium & Streamlit-Folium** 
-
-### Machine Learning & AI
-* **XGBoost** 
-* **Scikit-Learn** 
-* **Joblib**
-
-### Data Science & Analytics
-* **Pandas** 
-* **NumPy** 
-* **Plotly & Ridgeplot** 
-
-### Backend & Utilities
-* **Stravalib** 
-* **Python-Dotenv** 
-* **Pathlib** 
+RunCast offers automated synchronization with Strava through direct API integration, enabling the retrieval of recent activities and the conversion of raw JSON data into clean, analyzed CSV datasets with built-in outlier filtering. The platform provides performance analytics through interactive visualizations, including pace trends, distribution analyses, and a GitHub-style activity heatmap, along with fully interactive GPS maps generated using Folium and polyline decoding. Additionally, RunCast includes an AI-based performance prediction module that compares results with the classic Riegel formula and is designed to incorporate machine learning models such as XGBoost regression #BETA and kNN-based #BETA similarity analysis to improve prediction accuracy, particularly for users with limited historical data.
 
 
 ## Project Structure
@@ -59,9 +25,11 @@ runcast/
 │   └── scripts.py          # Helper functions
 ├── models/                
 │   └── xgb_running_model.joblib
-├── data/                   # Data storage (Raw & Processed)
-│   ├── personal/
-│   └── public/
+├── data/                   # Data storage
+│   ├── personal/           # Personal Strava data
+│   │   ├── raw/            # Raw data fetched from Strava API (JSON)
+│   │   └── processed/      # Cleaned and processed data (CSV)
+│   └── public/             # Public datasets
 └── notebooks/              # Jupyter Notebooks
 ```
 
@@ -73,6 +41,11 @@ To sync with Strava, you need to provide your API credentials. Create a `.env` f
 ```text
 CLIENT_ID=your_strava_client_id
 CLIENT_SECRET=your_strava_client_secret
+STRAVA_REFRESH_TOKEN=your_strava_refresh_token
+STRAVA_ACCESS_TOKEN=your_strava_access_token
+STRAVA_REDIRECT_URI=your_strava_redirect_uri
+STRAVA_EXPIRES_AT=your_strava_expires_at
+
 ```
 
 ### 2. Installation 
@@ -85,6 +58,47 @@ pip install -r requirements.txt
 
 Run the application from the root directory of the project using the following command:
 
+1. To download data:
+```text
+python src/fetch_activities.py
+```
+
+2. To run dashboard:
 ```text
 streamlit run dashboard/main.py
 ```
+
+## Technical Stack
+
+* **Streamlit** 
+* **Folium & Streamlit-Folium** 
+* **XGBoost** 
+* **Scikit-Learn** 
+* **Joblib**
+* **Pandas** 
+* **NumPy** 
+* **Plotly & Ridgeplot** 
+* **Stravalib** 
+* **Python-Dotenv** 
+* **Pathlib** 
+
+## SCREENSHOTS
+
+### SUMMARY
+![summary](screenshots/1.png)
+
+### PLOTS
+
+![calendar](screenshots/2.png)
+![pie plots](screenshots/3.png)
+![line plot](screenshots/4.png)
+![ridge plot](screenshots/5.png)
+
+### SELECTED RUN STATS AND MAP
+
+![stats](screenshots/6.png)
+![map](screenshots/7.png)
+
+### PREDICTIONS
+
+![predictions](screenshots/8.png)
