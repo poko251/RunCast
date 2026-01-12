@@ -28,9 +28,9 @@ st.set_page_config(
 
 
 def read_data():
+    """takes the latest CSV file"""
     folder = Path("data/personal/processed")
 
-    #takes the latest file
     latest = max(folder.glob("*.csv"), key=lambda p: p.stem)
     df = pd.read_csv(str(latest)).copy()
 
@@ -38,6 +38,7 @@ def read_data():
 
 
 def summary(df):
+    """Display a summary at the top of the dashboard"""
     total_distance = df["distance_km"].sum()
     total_runs = df["id"].count()
     total_time = df["elapsed_time_min"].sum()
@@ -99,6 +100,7 @@ def summary(df):
 
 
 def plots_dashboard(df):
+    """DISPLAY PLOTS IN COLUMNS"""
     with st.container(border=True):
 
         col1, col2 = st.columns(2)
@@ -134,10 +136,12 @@ def plots_dashboard(df):
             draw_ridge_plot(df)
 
 def show_data(df):
+    """SHOW DATA IN THE 2nd TAB"""
     columns = ["id","date", "distance_km", "time_readable", "average_heartrate", "has_map"]
     st.dataframe(df[columns], hide_index=True)
 
 def choose_run(df):
+    """Choose id run in 2nd tab"""
     options = df["id"]
     id = st.selectbox(
         "Choose run (id)",
@@ -146,13 +150,14 @@ def choose_run(df):
     return id
 
 def run_map(df, id):
-
+    """Display the map of a selected run"""
     m = f_map(df, id)
 
     if m is not None:
         st_folium(m,width="stretch" ,height=500)
     
 def run_stats(df, id):
+    """Show selected run stats"""
     selected_run = df[df['id'] == id].iloc[0]
 
     #date, distance, time, heart_rate, max_hr, cadence, pace, elevation_gain 
@@ -201,6 +206,7 @@ def run_stats(df, id):
         st.metric("Total elevation gain", f"{elev}m")
 
 def predictions(df, target_distance):
+    """RIEGELS and XGBOOST predictions XBOOST TO DO"""
     col1, col2 = st.columns(2, border=True)
 
     with col1:
@@ -210,7 +216,7 @@ def predictions(df, target_distance):
         st.metric("Predicted time", f"{format_time(predicted_time)}min")
         st.metric("Predicted pace", f"{round(predicted_pace, 2)}min/km")
 
-
+    #XGBOOST PREDICTION TO DO
 
 
 if __name__ == "__main__":
