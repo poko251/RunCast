@@ -4,7 +4,38 @@
 
 ## Key Features
 
-RunCast offers automated synchronization with Strava through direct API integration, enabling the retrieval of recent activities and the conversion of raw JSON data into clean, analyzed CSV datasets with built-in outlier filtering. The platform provides performance analytics through interactive visualizations, including pace trends, distribution analyses, and a GitHub-style activity heatmap, along with fully interactive GPS maps generated using Folium and polyline decoding. Additionally, RunCast includes an AI-based performance prediction module that compares results with the classic Riegel formula and is designed to incorporate machine learning models such as XGBoost regression #BETA and kNN-based #BETA similarity analysis to improve prediction accuracy, particularly for users with limited historical data.
+### Data & Processing
+* **Strava API Sync:** Automated OAuth2 activity retrieval for seamless data updates.
+* **Data Cleaning:** Efficient JSON-to-CSV conversion with built-in outlier filtering.
+
+###  Analytics & Visuals
+* **Interactive Plots:** Pace trends, Ridge plots, and GitHub-style activity heatmaps.
+* **GPS Mapping:** Interactive route visualization.
+
+###  AI & ML (BETA)
+* **Performance Predictions:** Race forecasting using the Riegel formula and XGBoost regression.
+* **kNN Augmentation:** Improved accuracy through k-Nearest Neighbors similarity matching.
+
+## SCREENSHOTS
+
+### SUMMARY
+![summary](screenshots/1.png)
+
+### PLOTS
+
+| | |
+| :---: | :---: |
+| ![calendar](screenshots/2.png) | ![pie plots](screenshots/3.png) |
+| ![line plot](screenshots/4.png) | ![ridge plot](screenshots/5.png) |
+
+### SELECTED RUN STATS AND MAP
+
+![stats](screenshots/6.png)
+![map](screenshots/7.png)
+
+### PREDICTIONS
+
+![predictions](screenshots/8.png)
 
 
 ## Project Structure
@@ -34,8 +65,12 @@ runcast/
 ```
 
 ##  How to Run
+### 1. Clone repository
 
-### 1. Environment Setup
+```text
+git clone https://github.com/poko251/RunCast
+```
+### 2. Environment Setup
 To sync with Strava, you need to provide your API credentials. Create a `.env` file in the **root folder** and paste your data:
 
 ```text
@@ -48,13 +83,13 @@ STRAVA_EXPIRES_AT=your_strava_expires_at
 
 ```
 
-### 2. Installation 
+### 3. Installation 
 
 ```text
 pip install -r requirements.txt
 ```
 
-### 3. Launch the Dashboard
+### 4. Launch the Dashboard
 
 Run the application from the root directory of the project using the following command:
 
@@ -82,23 +117,3 @@ streamlit run dashboard/main.py
 * **Python-Dotenv** 
 * **Pathlib** 
 
-## SCREENSHOTS
-
-### SUMMARY
-![summary](screenshots/1.png)
-
-### PLOTS
-
-![calendar](screenshots/2.png)
-![pie plots](screenshots/3.png)
-![line plot](screenshots/4.png)
-![ridge plot](screenshots/5.png)
-
-### SELECTED RUN STATS AND MAP
-
-![stats](screenshots/6.png)
-![map](screenshots/7.png)
-
-### PREDICTIONS
-
-![predictions](screenshots/8.png)
