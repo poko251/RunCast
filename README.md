@@ -23,15 +23,14 @@
 
 ### PLOTS
 
-| | |
-| :---: | :---: |
+
 | ![calendar](screenshots/2.png) | ![pie plots](screenshots/3.png) |
 | ![line plot](screenshots/4.png) | ![ridge plot](screenshots/5.png) |
 
 ### SELECTED RUN STATS AND MAP
 
-![stats](screenshots/6.png)
-![map](screenshots/7.png)
+| ![stats](screenshots/6.png) | ![map](screenshots/7.png) |
+
 
 ### PREDICTIONS
 
