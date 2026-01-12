@@ -7,7 +7,7 @@ import streamlit as st
 import plotly.graph_objects as go
 
 def pace_zones_distribution(df):
-
+    """Pace zones distribution plot"""
     bins = [0, 4.0, 4.5, 5.0, 6.0, float('inf')]
 
     labels = [
@@ -38,6 +38,7 @@ def pace_zones_distribution(df):
     st.plotly_chart(fig, width='stretch')
 
 def distance_distribution(df):
+    """Distance distribution plot"""
     bins = [0, 5.0, 10.0, 15.0, 21.1, float('inf')]
     
     labels = [
@@ -69,7 +70,7 @@ def distance_distribution(df):
     st.plotly_chart(fig, width='stretch')
 
 def draw_ridge_plot(df):
-
+    """Ridge plot, showing the distribution of running hours per day of the week."""
     df['start_date'] = pd.to_datetime(df['start_date'])
     df['day_name'] = df['start_date'].dt.day_name()
     df['hour'] = df['start_date'].dt.hour
@@ -136,6 +137,7 @@ def draw_ridge_plot(df):
     st.plotly_chart(fig, width='stretch')
 
 def draw_github_calendar(df, year):
+    """Github calendar showing which day of a selected year person run"""
     df['date'] = pd.to_datetime(df['start_date']).dt.date
     daily_km = df.groupby('date')['distance_km'].sum()
 
@@ -175,6 +177,7 @@ def draw_github_calendar(df, year):
 
 
 def draw_pace_over_time(df):
+    """pace progression over time with a reversed Y-axis"""
     df['start_date'] = pd.to_datetime(df['start_date'])
     df = df.sort_values('start_date')
 
