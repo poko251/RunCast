@@ -1,6 +1,7 @@
 import streamlit as st
 
 def predict_riegel(df, target_distance_km):
+    """Predict time based on a riegel equation"""
     if df.empty:
         return None, None, 0
 
