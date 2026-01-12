@@ -7,6 +7,7 @@ import streamlit as st
 
 
 def f_map(df, id):
+    """creats map of a selected run"""
     selected_run = df[df['id'] == id].iloc[0]
 
     if selected_run["has_map"] == 0 :
