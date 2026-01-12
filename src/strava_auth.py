@@ -4,6 +4,7 @@ from dotenv import load_dotenv, set_key
 from stravalib.client import Client
 
 def load_env_data():
+    
     load_dotenv()
     return {
         "client_id": os.getenv("STRAVA_CLIENT_ID"),
@@ -14,12 +15,14 @@ def load_env_data():
     }
 
 def update_env_file(access_token, refresh_token, expires_at):
+    """updates env file if token is expried"""
     env_path = ".env"
     set_key(env_path, "STRAVA_ACCESS_TOKEN", access_token)
     set_key(env_path, "STRAVA_REFRESH_TOKEN", refresh_token)
     set_key(env_path, "STRAVA_EXPIRES_AT", str(expires_at))
 
 def get_strava_client():
+    """Check if token is valid and gets client"""
     env = load_env_data()
     client = Client()
 
@@ -44,7 +47,7 @@ def get_strava_client():
         
         client.access_token = token_response['access_token']
     else:
-        print("Token jest nadal ważny.")
+        print("Token is valid.")
         client.access_token = env["access_token"]
 
     return client
